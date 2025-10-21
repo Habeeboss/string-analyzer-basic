@@ -65,7 +65,6 @@ For instance "Eva, can I see bees in a cave?" is the first request.
 POST is the endpoint. Analyze at POST http://localhost:1020/strings
 
 Body:
-
 json
 {
   "value": "take a sit at the high table"
@@ -101,7 +100,6 @@ Example Request 2: "the weather is hot toh si rehtaew eht"
 Endpoint: POST http://localhost:1020/strings
 
 Body:
-
 json
 {
   "value": "the weather is hot toh si rehtaew eht"
