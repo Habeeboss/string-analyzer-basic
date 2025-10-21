@@ -14,14 +14,50 @@ String Analyzer Service (HNG Stage 1, Backend Wizards)
 
  Text that sounds human is transformed into structured filtering through natural language querying.
 
+ Technologies Used
+
+Node.js – JavaScript runtime  
+Express.js – Web framework for building RESTful APIs  
+MongoDB Atlas – Cloud database for storage  
+Mongoose – ODM for MongoDB  
+Crypto (Node.js core) – For SHA-256 hashing  
+Dotenv – For managing environment variable
+
+
+ How It Works
+Client sends a string via POST request.  
+The API computes:
+   - String length  
+   - Whether it’s a palindrome  
+   - Number of unique characters  
+   - Word count  
+   - SHA-256 hash  
+   - Character frequency map  
+Results are stored in MongoDB Atlas and returned as JSON.  
+You can retrieve, filter, or delete strings through other endpoints.
+
  Beginning (Local Configuration & Testing)
+ Setup Instructions
+
+Clone the Repository
+git clone https://github.com/Habeeboss/string-analyzer-basic.git
+cd string-analyzer-basic
+
 1. Set up dependencies
-Install express mongoose cors dotenv crypto-js using bash npm
+Install express mongoose cors dotenv crypto-js using bash npm npm install or (npm install express mongoose cors dotenv crypto-js)
+
 2. Launch the application
 Make sure PORT and MONGO_URI are configured appropriately in your.env file.
 
-Node server.js and bash
+MONGO_URI=your_mongodb_connection_string
+PORT=1020
+
+Run Locally
+Node server.js/npm start/npm run dev in the  bash
 Usually, the server will operate at http://localhost:1020.
+
+Your app will run at:
+http://localhost:1020
 
 3. Postman Test
 By submitting POST queries to the /api/analyze endpoint, you can test the API.
@@ -101,3 +137,13 @@ json
   "created_at": "2025-10-20T23:33:01.800Z",
   "__v": 0
 }
+
+Deployment
+This project is deployed on Railway.app
+Live API URL:https://string-analyzer-basic-production.up.railway.app
+
+Author
+Name: Habeeb Olakunle
+Email: sannihabeebo30@gmail.com
+GitHub: @Habeeboss
+Stack: Node.js, Express, MongoDB
