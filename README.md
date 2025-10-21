@@ -54,8 +54,6 @@ PORT=1020
 
 Run Locally
 Node server.js/npm start/npm run dev in the  bash
-Usually, the server will operate at http://localhost:1020.
-
 Your app will run at:
 http://localhost:1020
 
@@ -64,13 +62,13 @@ By submitting POST queries to the /api/analyze endpoint, you can test the API.
 
 Examples of APIs
 For instance "Eva, can I see bees in a cave?" is the first request.
-POST is the endpoint. Analyze at POST http://localhost:1020/api/analyze
+POST is the endpoint. Analyze at POST http://localhost:1020/strings
 
 Body:
 
 json
 {
-  "text": "Eva can I see bees in a cave"
+  "value": "Eva can I see bees in a cave"
 }
 Example Response 1:
 
@@ -103,13 +101,13 @@ json
 }  
 
 Example Request 2: "Just do it"
-Endpoint: POST http://localhost:1020/api/analyze
+Endpoint: POST http://localhost:1020/strings
 
 Body:
 
 json
 {
-  "text": "Just do it"
+  "value": "Just do it"
 }
 Example Response 2:
 

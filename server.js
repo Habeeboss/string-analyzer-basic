@@ -10,8 +10,8 @@ app.use(cors());
 app.use(express.json());
 
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('MongoDB connected successfully'))
-  .catch(err => console.error('MongoDB connection error:', err));
+  .then(() => console.log(' MongoDB connected successfully'))
+  .catch(err => console.error(' MongoDB connection error:', err));
 
 const analysisSchema = new mongoose.Schema({
   value: { type: String, required: true },
@@ -51,17 +51,19 @@ function analyzeString(str) {
   };
 }
 
-app.post('/api/analyze', async (req, res) => {
+app.post('/strings', async (req, res) => {
   try {
-    const { text } = req.body;
-    if (!text) return res.status(400).json({ error: 'Text field is required.' });
+    const { value } = req.body;
+    if (!value || typeof value !== 'string') {
+      return res.status(400).json({ error: 'Invalid or missing "value" field. Must be a string.' });
+    }
 
-    const properties = analyzeString(text);
+    const properties = analyzeString(value);
 
     const existing = await StringAnalysis.findOne({ 'properties.sha256_hash': properties.sha256_hash });
     if (existing) return res.status(409).json({ message: 'String already exists.', data: existing });
 
-    const saved = await StringAnalysis.create({ value: text, properties });
+    const saved = await StringAnalysis.create({ value, properties });
     res.status(201).json(saved);
   } catch (err) {
     console.error(err);
@@ -69,8 +71,7 @@ app.post('/api/analyze', async (req, res) => {
   }
 });
 
-
-app.get('/api/analyze', async (req, res) => {
+app.get('/strings', async (req, res) => {
   try {
     const { is_palindrome, min_length, max_length, contains } = req.query;
     let filter = {};
@@ -87,18 +88,17 @@ app.get('/api/analyze', async (req, res) => {
   }
 });
 
-
-app.get('/api/analyze/:value', async (req, res) => {
+app.get('/strings/:value', async (req, res) => {
   try {
     const doc = await StringAnalysis.findOne({ value: req.params.value });
-    if (!doc) return res.status(404).json({ error: 'Not found' });
+    if (!doc) return res.status(404).json({ error: 'String not found' });
     res.json(doc);
   } catch (err) {
     res.status(500).json({ error: 'Server error', message: err.message });
   }
 });
 
-app.delete('/api/analyze/:value', async (req, res) => {
+app.delete('/strings/:value', async (req, res) => {
   try {
     const deleted = await StringAnalysis.findOneAndDelete({ value: req.params.value });
     if (!deleted) return res.status(404).json({ error: 'String not found' });
@@ -112,23 +112,21 @@ app.get('/health', (req, res) => {
   res.json({ status: 'OK', time: new Date().toISOString() });
 });
 
-
 app.get('/', (req, res) => {
   res.json({
-    message: 'String Analyzer API',
-    version: '2.0',
+    message: 'String Analyzer Service',
+    version: '1.0',
     routes: [
-      'POST /api/analyze - Analyze and store string',
-      'GET /api/analyze - List analyzed strings',
-      'GET /api/analyze/:value - Get by string value',
-      'DELETE /api/analyze/:value - Delete analyzed string',
+      'POST /strings - Analyze and store string',
+      'GET /strings - List analyzed strings',
+      'GET /strings/:value - Get by string value',
+      'DELETE /strings/:value - Delete analyzed string',
       'GET /health - Check service status'
     ]
   });
 });
 
-
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
-  console.log(` String Analyzer Service is now running at http://localhost:${PORT}`);
+  console.log(`String Analyzer Service running at http://localhost:${PORT}`);
 });
