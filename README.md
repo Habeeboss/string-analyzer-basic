@@ -67,33 +67,36 @@ POST is the endpoint. Analyze at POST http://localhost:1020/strings
 Body:
 json
 {
-  "value": "take a sit at the high table"
+  "value": "and the weather is hot toh si rehtaew eht dna"
 }
 Example Response 1:
 
 json
 {
-    "value": "take a sit at the high table",
+    "id": "ac91b7593ea73e1365410e96beac93c5e2417859ab0c572ba4fca33844a330a9",
+    "value": "and the weather is hot toh si rehtaew eht dna",
     "properties": {
-        "length": 28,
-        "is_palindrome": false,
-        "word_count": 7,
-        "unique_characters": 11,
-        "character_frequency": {
-            "t": 5,
+        "length": 45,
+        "is_palindrome": true,
+        "unique_characters": 12,
+        "word_count": 10,
+        "sha256_hash": "ac91b7593ea73e1365410e96beac93c5e2417859ab0c572ba4fca33844a330a9",
+        "character_frequency_map": {
             "a": 4,
-            "k": 1,
-            "e": 3,
-            " ": 6,
-            "s": 1,
+            "n": 2,
+            "d": 2,
+            " ": 9,
+            "t": 6,
+            "h": 6,
+            "e": 6,
+            "w": 2,
+            "r": 2,
             "i": 2,
-            "h": 3,
-            "g": 1,
-            "b": 1,
-            "l": 1
-        },
-        "sha256_hash": "af2cc0b9178b428187800d9de27ebeb2ab106c33e150806e502df7d8afcf5733"
-    }
+            "s": 2,
+            "o": 2
+        }
+    },
+    "created_at": "2025-10-21T10:49:37.367Z"
 }
 
 Example Request 2: "the weather is hot toh si rehtaew eht"
@@ -102,32 +105,37 @@ Endpoint: POST http://localhost:1020/strings
 Body:
 json
 {
-  "value": "the weather is hot toh si rehtaew eht"
+  "value": "you can have a sit"
 }
 Example Response 2:
 
 json
 {
-    "value": "the weather is hot toh si rehtaew eht",
+    "id": "c44ba760d011f200591cfbcce2a62684217b0aca7ab224a1f70756ebcfbd470e",
+    "value": "you can have a sit",
     "properties": {
-        "length": 37,
-        "is_palindrome": true,
-        "word_count": 8,
-        "unique_characters": 10,
-        "character_frequency": {
-            "t": 6,
-            "h": 6,
-            "e": 6,
-            " ": 7,
-            "w": 2,
-            "a": 2,
-            "r": 2,
-            "i": 2,
-            "s": 2,
-            "o": 2
-        },
-        "sha256_hash": "671b65190d6ff5134dae1847e1d514965c3ab79f2a6a29401b4bb01d24e05ec7"
-    }
+        "length": 18,
+        "is_palindrome": false,
+        "unique_characters": 13,
+        "word_count": 5,
+        "sha256_hash": "c44ba760d011f200591cfbcce2a62684217b0aca7ab224a1f70756ebcfbd470e",
+        "character_frequency_map": {
+            "y": 1,
+            "o": 1,
+            "u": 1,
+            " ": 4,
+            "c": 1,
+            "a": 3,
+            "n": 1,
+            "h": 1,
+            "v": 1,
+            "e": 1,
+            "s": 1,
+            "i": 1,
+            "t": 1
+        }
+    },
+    "created_at": "2025-10-21T10:50:50.282Z"
 }
 
 Deployment
