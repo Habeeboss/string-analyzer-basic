@@ -68,72 +68,68 @@ Body:
 
 json
 {
-  "value": "Eva can I see bees in a cave"
+  "value": "take a sit at the high table"
 }
 Example Response 1:
 
 json
 {
-  "value": "Eva can I see bees in a cave",
-  "properties": {
-    "length": 28,
-    "is_palindrome": true,
-    "word_count": 8,
-    "unique_characters": 11,
-    "character_frequency": {
-      "E": 1,
-      "v": 2,
-      "a": 4,
-      " ": 7,
-      "c": 2,
-      "n": 2,
-      "I": 1,
-      "s": 2,
-      "e": 5,
-      "b": 1,
-      "i": 1
-    },
-    "sha256_hash": "fe48bf7ba7430d5c1feff140399f242ef1beff80fecc72d8f4427a948ec37745"
-  },
-  "_id": "68f6c673a81187f9c2e6f484",
-  "created_at": "2025-10-20T23:32:03.994Z",
-  "__v": 0
-}  
+    "value": "take a sit at the high table",
+    "properties": {
+        "length": 28,
+        "is_palindrome": false,
+        "word_count": 7,
+        "unique_characters": 11,
+        "character_frequency": {
+            "t": 5,
+            "a": 4,
+            "k": 1,
+            "e": 3,
+            " ": 6,
+            "s": 1,
+            "i": 2,
+            "h": 3,
+            "g": 1,
+            "b": 1,
+            "l": 1
+        },
+        "sha256_hash": "af2cc0b9178b428187800d9de27ebeb2ab106c33e150806e502df7d8afcf5733"
+    }
+}
 
-Example Request 2: "Just do it"
+Example Request 2: "the weather is hot toh si rehtaew eht"
 Endpoint: POST http://localhost:1020/strings
 
 Body:
 
 json
 {
-  "value": "Just do it"
+  "value": "the weather is hot toh si rehtaew eht"
 }
 Example Response 2:
 
 json
 {
-  "value": "Just do it",
-  "properties": {
-    "length": 10,
-    "is_palindrome": false,
-    "word_count": 3,
-    "unique_characters": 8,
-    "character_frequency": {
-      "J": 1,
-      "u": 1,
-      "s": 1,
-      "t": 2,
-      " ": 2,
-      "d": 1,
-      "o": 1,
-      "i": 1
-    },
-    "sha256_hash": "6a0b4ef27e630ef6a692b98b33ae575166973d7a27bdbdc448b852926de22123"
-  },
-  "_id": "68f6c6ada81187f9c2e6f487",
-  "created_at": "2025-10-20T23:33:01.800Z",
-  "__v": 0
+    "value": "the weather is hot toh si rehtaew eht",
+    "properties": {
+        "length": 37,
+        "is_palindrome": true,
+        "word_count": 8,
+        "unique_characters": 10,
+        "character_frequency": {
+            "t": 6,
+            "h": 6,
+            "e": 6,
+            " ": 7,
+            "w": 2,
+            "a": 2,
+            "r": 2,
+            "i": 2,
+            "s": 2,
+            "o": 2
+        },
+        "sha256_hash": "671b65190d6ff5134dae1847e1d514965c3ab79f2a6a29401b4bb01d24e05ec7"
+    }
 }
 
 Deployment

@@ -10,8 +10,8 @@ app.use(cors());
 app.use(express.json());
 
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log(' MongoDB connected successfully'))
-  .catch(err => console.error(' MongoDB connection error:', err));
+  .then(() => console.log('MongoDB connected successfully'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
 const analysisSchema = new mongoose.Schema({
   value: { type: String, required: true },
@@ -34,7 +34,8 @@ function analyzeString(str) {
   const is_palindrome = lower === lower.split('').reverse().join('');
   const words = cleanStr.split(/\s+/).filter(Boolean);
   const unique_chars = new Set(cleanStr).size;
-  const sha256_hash = crypto.createHash('sha256').update(cleanStr).digest('hex');
+
+  const sha256_hash = crypto.createHash('sha256').update(str).digest('hex');
 
   const charFreq = {};
   for (let c of cleanStr) {
@@ -59,12 +60,15 @@ app.post('/strings', async (req, res) => {
     }
 
     const properties = analyzeString(value);
-
     const existing = await StringAnalysis.findOne({ 'properties.sha256_hash': properties.sha256_hash });
     if (existing) return res.status(409).json({ message: 'String already exists.', data: existing });
 
     const saved = await StringAnalysis.create({ value, properties });
-    res.status(201).json(saved);
+
+    res.status(201).json({
+      value: saved.value,
+      properties: saved.properties
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Server error', message: err.message });
@@ -77,8 +81,11 @@ app.get('/strings', async (req, res) => {
     let filter = {};
 
     if (is_palindrome) filter['properties.is_palindrome'] = is_palindrome === 'true';
-    if (min_length) filter['properties.length'] = { $gte: parseInt(min_length) };
-    if (max_length) filter['properties.length'] = { ...filter['properties.length'], $lte: parseInt(max_length) };
+    if (min_length || max_length) {
+      filter['properties.length'] = {};
+      if (min_length) filter['properties.length'].$gte = parseInt(min_length);
+      if (max_length) filter['properties.length'].$lte = parseInt(max_length);
+    }
     if (contains) filter[`properties.character_frequency.${contains}`] = { $exists: true };
 
     const results = await StringAnalysis.find(filter);
@@ -92,7 +99,11 @@ app.get('/strings/:value', async (req, res) => {
   try {
     const doc = await StringAnalysis.findOne({ value: req.params.value });
     if (!doc) return res.status(404).json({ error: 'String not found' });
-    res.json(doc);
+
+    res.json({
+      value: doc.value,
+      properties: doc.properties
+    });
   } catch (err) {
     res.status(500).json({ error: 'Server error', message: err.message });
   }
@@ -108,6 +119,31 @@ app.delete('/strings/:value', async (req, res) => {
   }
 });
 
+app.get('/strings/filter-by-natural-language', async (req, res) => {
+  try {
+    const { query } = req.query;
+    if (!query) return res.status(400).json({ error: 'query parameter is required' });
+
+    const q = query.toLowerCase();
+    let filter = {};
+
+    if (q.includes('palindrome')) filter['properties.is_palindrome'] = true;
+
+    const lengthMatch = q.match(/longer than (\d+)/);
+    if (lengthMatch) filter['properties.length'] = { $gt: parseInt(lengthMatch[1]) };
+
+    const containsMatch = q.match(/containing ['"]?([a-zA-Z])['"]?/);
+    if (containsMatch) {
+      filter[`properties.character_frequency.${containsMatch[1]}`] = { $exists: true };
+    }
+
+    const results = await StringAnalysis.find(filter);
+    res.json({ count: results.length, results });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error', message: err.message });
+  }
+});
+
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', time: new Date().toISOString() });
 });
@@ -115,16 +151,18 @@ app.get('/health', (req, res) => {
 app.get('/', (req, res) => {
   res.json({
     message: 'String Analyzer Service',
-    version: '1.0',
+    version: '2.0',
     routes: [
       'POST /strings - Analyze and store string',
       'GET /strings - List analyzed strings',
       'GET /strings/:value - Get by string value',
       'DELETE /strings/:value - Delete analyzed string',
+      'GET /strings/filter-by-natural-language - Natural query filter',
       'GET /health - Check service status'
     ]
   });
 });
+
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
